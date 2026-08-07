@@ -1,0 +1,56 @@
+runtime:
+  device: auto
+  enable_amp: true
+  compile_model: true
+  seed: 2026
+  show_progress: true
+  n_workers: 0
+
+training:
+  epochs: 50
+  learning_rate: 1.25e-3
+  weight_decay: 1e-07
+  train_batch_size: 64
+  eval_batch_size: 128
+  stride: 150
+  early_stopping: 20
+  lr_decay_factor: 0.989
+
+model:
+  d_model: 128
+  n_heads: 4
+  n_layers: 3
+  max_seq_len: 200
+  attn_dropout: 0.1
+  ffn_dim: 256
+  ffn_dropout: 0.3
+  embedding_dropout: 0.2
+
+evaluation:
+  mode: full
+  top_k: [10, 20, 50, 200]
+  metrics: [recall, ndcg, mrr]
+  valid_metric: mrr@10
+
+data:
+  dataset: ml-1m
+  train_seq_mode: "sliding_window"
+
+tmdb:
+  base_url: "https://api.themoviedb.org/3"
+  rate_limit_requests: 40
+  rate_limit_period: 10
+  include_adult: false
+
+cache:
+  enabled: true
+  ttl_seconds: 86400
+  max_size: 10000
+
+assets:
+  base_url: "https://github.com/mohiey-507/MovieRec/releases/download"
+  release_tag: "v1.0-ml1m"
+  files:
+    - "best_model.pt"
+    - "stats.json"
+    - "movie_catalog.json"

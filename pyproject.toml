@@ -1,0 +1,60 @@
+[project]
+name = "sasrecnext-engine"
+version = "0.1.0"
+description = "SASRec-based movie recommendation system on MovieLens (1M/10M)"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy==2.5.1",
+    "pandas==3.0.3",
+    "pyyaml>=6.0.3",
+    "torch==2.13.0",
+    "tqdm==4.68.4",
+    "pydantic>=2.13.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["engine", "scripts"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "mypy>=2.3.0",
+    "types-pyyaml>=6.0.12.20260518",
+    "pandas-stubs>=3.0.3.260530",
+    "types-tqdm>=4.68.0.20260608",
+    "optuna==4.9.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+src = ["engine", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "A", "SIM"]
+ignore = ["E501", "B008", "UP040", "UP046"]
+
+[tool.ruff.format]
+line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+
+[tool.vulture]
+paths = ["engine", "scripts"]
+min_confidence = 80
+sort_by_size = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
