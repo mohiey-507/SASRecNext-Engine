@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -54,7 +55,7 @@ class Trainer:
         self._patience_counter = 0
 
     # Public API
-    def fit(self) -> dict[str, float]:
+    def fit(self, epoch_callback: Callable[[int, dict[str, float]], None] | None = None) -> dict[str, float]:
         """Run the full training loop with validation and early stopping."""
         logger.info("Starting training for %d epochs", self._cfg.training.epochs)
 
@@ -66,6 +67,9 @@ class Trainer:
             improved = self._update_best_metric(val_metrics)
             if improved:
                 self._save_checkpoint(epoch, val_metrics)
+
+            if epoch_callback is not None:
+                epoch_callback(epoch, val_metrics)
 
             if self._is_patience_exhausted():
                 logger.info(

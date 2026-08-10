@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 from engine.data import DataPipeline, SASRecEvalDataset, SASRecTrainDataset, create_dataloader
 from engine.evaluation import Evaluator
-from engine.models import SASRecNext
+from engine.models import MODEL_REGISTRY
 from engine.training import Trainer
 from engine.utils import get_logger, load_config, resolve_device, set_global_log_file, set_seed
 
@@ -18,10 +18,11 @@ logger = get_logger(__name__)
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train SASRec")
-    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m.yaml"))
+    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m/sasrecnext_tied.yaml"))
+    parser.add_argument("--override", nargs="*", help="Override config values (e.g. model.tied_weights=false)")
     args = parser.parse_args()
 
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, args.override)
     device = resolve_device(cfg.runtime.device)
 
     set_global_log_file(Path(cfg.data.log_dir), "train.log")
@@ -63,7 +64,8 @@ def main() -> None:
     )
 
     # Model
-    model = SASRecNext(n_items=n_items, cfg=cfg.model).to(device)
+    model_cls = MODEL_REGISTRY[cfg.model.model_type]
+    model = model_cls(n_items=n_items, cfg=cfg.model).to(device)
     train_model: nn.Module = torch.compile(model, dynamic=True) if cfg.runtime.compile_model else model  # type: ignore
     n_params = sum(p.numel() for p in model.parameters())
     param_bytes = sum(p.numel() * p.element_size() for p in model.parameters())
@@ -131,7 +133,7 @@ def main() -> None:
         metrics=cfg.evaluation.metrics,
         top_k=cfg.evaluation.top_k,
         device=device,
-        mode=cfg.evaluation.mode
+        mode=cfg.evaluation.mode,
     )
     test_metrics = test_evaluator.evaluate()
     metrics_str = " | ".join(f"{k}: {v:.4f}" for k, v in test_metrics.items())

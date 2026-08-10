@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 METRIC_PATTERN = re.compile(r"^(?:(?P<mode>\w+)_)?(?P<metric>\w+)@(?P<k>\d+)$")
 
+
 class ImmutableModel(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 
@@ -34,6 +35,8 @@ class TrainingConfig(ImmutableModel):
 
 
 class ModelConfig(ImmutableModel):
+    model_type: Literal["SASRecNext", "SASRec"] = "SASRecNext"
+    tied_weights: bool = True
     d_model: Annotated[int, Field(gt=0)] = 128
     n_heads: Annotated[int, Field(gt=0)] = 4
     n_layers: Annotated[int, Field(gt=0)] = 3
@@ -132,35 +135,11 @@ class DataConfig(ImmutableModel):
         return data
 
 
-class TMDBConfig(ImmutableModel):
-    base_url: str = "https://api.themoviedb.org/3"
-    rate_limit_requests: Annotated[int, Field(gt=0, le=40)] = 40
-    rate_limit_period: Annotated[int, Field(gt=0)] = 10
-    include_adult: bool = False
-
-    @model_validator(mode="after")
-    def _validate_url(self) -> TMDBConfig:
-        if not self.base_url.startswith("http"):
-            raise ValueError("base_url must start with http")
-        return self
-
-
-class CacheConfig(ImmutableModel):
-    enabled: bool = True
-    ttl_seconds: Annotated[int, Field(gt=0)] = 86400
-    max_size: Annotated[int, Field(gt=0)] = 10000
-
-
-class APIConfig(ImmutableModel):
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173"])
-
-
 class AssetsConfig(ImmutableModel):
     base_url: str = "https://github.com/mohiey-507/MovieRec/releases/download"
     release_tag: str = "v1.0-ml10m"
     files: list[str] = Field(
         default_factory=lambda: [
-            "movie_catalog.json",
             "stats.json",
             "best_model.pt",
         ]
@@ -173,9 +152,6 @@ class Config(ImmutableModel):
     model: ModelConfig = Field(default=ModelConfig())
     evaluation: EvaluationConfig = Field(default=EvaluationConfig())
     data: DataConfig = Field(default=DataConfig())
-    tmdb: TMDBConfig = Field(default=TMDBConfig())
-    cache: CacheConfig = Field(default=CacheConfig())
-    api: APIConfig = Field(default=APIConfig())
     assets: AssetsConfig = Field(default=AssetsConfig())
 
     @model_validator(mode="before")
@@ -194,10 +170,45 @@ class Config(ImmutableModel):
         return data
 
 
-def load_config(path: Path | None = None) -> Config:
+def load_config(path: Path | None = None, overrides: list[str] | None = None) -> Config:
     """Load configuration from a YAML file, falling back to defaults for missing fields."""
     if path is None:
-        return Config()
-    raw: dict[str, Any] = yaml.safe_load(path.read_text()) or {}
+        raw: dict[str, Any] = {}
+    else:
+        raw = yaml.safe_load(path.read_text()) or {}
+
+    if overrides:
+        for override in overrides:
+            if "=" not in override:
+                continue
+            key_path, value_str = override.split("=", 1)
+            keys = key_path.split(".")
+
+            # Simple conversion for boolean and numbers since Pydantic does the rest
+            val: Any = value_str
+            if value_str.lower() == "true":
+                val = True
+            elif value_str.lower() == "false":
+                val = False
+            elif value_str.isdigit():
+                val = int(value_str)
+
+            # Traverse nested dict
+            d = raw
+            for k in keys[:-1]:
+                d = d.setdefault(k, {})
+            d[keys[-1]] = val
+    # Dynamic Directory Naming based on config file
+    if path is not None:
+        dataset = raw.get("data", {}).get("dataset", "ml-10m")
+        config_name = path.stem
+
+        data_dict = raw.setdefault("data", {})
+
+        if not data_dict.get("checkpoint_dir"):
+            data_dict["checkpoint_dir"] = f"checkpoints/{dataset}/{config_name}"
+
+        if not data_dict.get("log_dir"):
+            data_dict["log_dir"] = f"logs/{dataset}/{config_name}"
 
     return Config(**raw)

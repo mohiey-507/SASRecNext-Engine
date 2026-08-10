@@ -44,6 +44,9 @@ class SwiGLUFFN(nn.Module):
 class RoPE(nn.Module):
     """Rotary Position Embeddings with dynamic dtype and device dispatching."""
 
+    cos_cached: torch.Tensor
+    sin_cached: torch.Tensor
+
     def __init__(self, dim: int, max_seq_len: int = 200) -> None:
         super().__init__()
         inv_freq = 1.0 / (10000 ** (torch.arange(0, dim, 2, dtype=torch.float32) / dim))
@@ -59,8 +62,8 @@ class RoPE(nn.Module):
 
         # Match device and precision dynamically for autocast / mixed-precision compatibility
 
-        cos = self.cos_cached[:, :seq_len, ...].to(device=q.device, dtype=q.dtype)  # type: ignore[index]
-        sin = self.sin_cached[:, :seq_len, ...].to(device=q.device, dtype=q.dtype)  # type: ignore[index]
+        cos = self.cos_cached[:, :seq_len, ...].to(device=q.device, dtype=q.dtype)
+        sin = self.sin_cached[:, :seq_len, ...].to(device=q.device, dtype=q.dtype)
 
         def rotate_half(x: torch.Tensor) -> torch.Tensor:
             half_dim = x.shape[-1] // 2
@@ -89,8 +92,7 @@ class RoPESelfAttention(nn.Module):
         self,
         x: Tensor,
         attention_mask: Tensor | None,
-        return_attn_weights: bool = False,
-    ) -> tuple[Tensor, Tensor | None]:
+    ) -> Tensor:
         batch_size, seq_len, d_model = x.shape
 
         qkv = self.qkv(x).reshape(batch_size, seq_len, 3, self.nhead, self.head_dim).permute(2, 0, 1, 3, 4)
@@ -101,27 +103,18 @@ class RoPESelfAttention(nn.Module):
         # Reshape to (B, H, L, head_dim) layout expected by SDPA
         q, k, v = q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2)
 
-        if return_attn_weights:
-            scores = torch.matmul(q, k.transpose(-2, -1)) / (self.head_dim**0.5)
-            if attention_mask is not None:
-                scores = scores + attention_mask
-            attn_weights = F.softmax(scores, dim=-1)
-            attn_weights = torch.nan_to_num(attn_weights, nan=0.0)
-            out = torch.matmul(attn_weights, v)
-        else:
-            out = F.scaled_dot_product_attention(
-                query=q,
-                key=k,
-                value=v,
-                attn_mask=attention_mask,
-                dropout_p=self.dropout.p if self.training else 0.0,
-                is_causal=False,
-            )
-            attn_weights = None
+        out = F.scaled_dot_product_attention(
+            query=q,
+            key=k,
+            value=v,
+            attn_mask=attention_mask,
+            dropout_p=self.dropout.p if self.training else 0.0,
+            is_causal=False,
+        )
 
         out = out.transpose(1, 2).contiguous().reshape(batch_size, seq_len, d_model)
 
-        return self.dropout(self.out_proj(out)), attn_weights
+        return self.dropout(self.out_proj(out))  # type: ignore[no-any-return]
 
 
 class TransformerLayer(nn.Module):
@@ -155,10 +148,136 @@ class TransformerLayer(nn.Module):
         self,
         x: Tensor,
         attention_mask: Tensor | None = None,
-        return_attn_weights: bool = False,
-    ) -> tuple[Tensor, Tensor | None]:
-        attn_out, attn_weights = self.attn(self.attn_norm(x), attention_mask, return_attn_weights)
+    ) -> Tensor:
+        attn_out = self.attn(self.attn_norm(x), attention_mask)
         h = x + attn_out
-
         out = h + self.ffn(self.ffn_norm(h))
-        return out, attn_weights
+        return out  # type: ignore[no-any-return]
+
+
+class StandardAttentionFF(nn.Module):
+    """PointWise Feed Forward used in Meta's SASRec baseline."""
+
+    def __init__(
+        self,
+        embedding_dim: int,
+        hidden_dim: int,
+        activation_fn: str,
+        dropout_rate: float,
+    ) -> None:
+        super().__init__()
+        assert activation_fn in ("relu", "gelu"), f"Invalid activation_fn {activation_fn}"
+
+        self._conv1d = nn.Sequential(
+            nn.Conv1d(
+                in_channels=embedding_dim,
+                out_channels=hidden_dim,
+                kernel_size=1,
+            ),
+            nn.GELU() if activation_fn == "gelu" else nn.ReLU(),
+            nn.Dropout(p=dropout_rate),
+            nn.Conv1d(
+                in_channels=hidden_dim,
+                out_channels=embedding_dim,
+                kernel_size=1,
+            ),
+            nn.Dropout(p=dropout_rate),
+        )
+
+    def forward(self, inputs: Tensor) -> Tensor:
+        # Conv1D requires (B, D, N)
+        return self._conv1d(inputs.transpose(-1, -2)).transpose(-1, -2) + inputs  # type: ignore[no-any-return]
+
+
+class SASRecSelfAttention(nn.Module):
+    """Multi-Head Self Attention matching Meta's baseline but accepting our (B, 1, L, L) mask."""
+
+    def __init__(self, d_model: int, nhead: int, dropout: float) -> None:
+        super().__init__()
+        self.nhead = nhead
+        self.head_dim = d_model // nhead
+
+        self.q_proj = nn.Linear(d_model, d_model, bias=True)
+        self.k_proj = nn.Linear(d_model, d_model, bias=True)
+        self.v_proj = nn.Linear(d_model, d_model, bias=True)
+        self.out_proj = nn.Linear(d_model, d_model, bias=True)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(
+        self,
+        query: Tensor,
+        key: Tensor,
+        value: Tensor,
+        attention_mask: Tensor | None,
+    ) -> Tensor:
+        import torch.nn.functional as F
+
+        batch_size, seq_len, d_model = query.shape
+
+        q = self.q_proj(query).view(batch_size, seq_len, self.nhead, self.head_dim).transpose(1, 2)
+        k = self.k_proj(key).view(batch_size, seq_len, self.nhead, self.head_dim).transpose(1, 2)
+        v = self.v_proj(value).view(batch_size, seq_len, self.nhead, self.head_dim).transpose(1, 2)
+
+        out = F.scaled_dot_product_attention(
+            query=q,
+            key=k,
+            value=v,
+            attn_mask=attention_mask,
+            dropout_p=self.dropout.p if self.training else 0.0,
+            is_causal=False,
+        )
+
+        out = out.transpose(1, 2).contiguous().reshape(batch_size, seq_len, d_model)
+
+        return self.out_proj(out)  # type: ignore[no-any-return]
+
+
+class SASRecTransformerLayer(nn.Module):
+    """SASRec block matching Meta's exact layer normalizations and residual paths."""
+
+    def __init__(
+        self,
+        d_model: int,
+        n_heads: int,
+        attn_dropout: float,
+        ffn_dim: int,
+        ffn_dropout: float,
+    ) -> None:
+        super().__init__()
+        self.attn_norm = nn.LayerNorm(d_model, eps=1e-8)
+        self.attn = SASRecSelfAttention(
+            d_model=d_model,
+            nhead=n_heads,
+            dropout=attn_dropout,
+        )
+        self.ffn_norm = nn.LayerNorm(d_model, eps=1e-8)
+        self.ffn = StandardAttentionFF(
+            embedding_dim=d_model,
+            hidden_dim=ffn_dim,
+            activation_fn="relu",
+            dropout_rate=ffn_dropout,
+        )
+
+    def forward(
+        self,
+        x: Tensor,
+        attention_mask: Tensor | None = None,
+    ) -> Tensor:
+        # Query is LayerNorm(x), Key and Value are x
+        q = self.attn_norm(x)
+        attn_out = self.attn(
+            query=q,
+            key=x,
+            value=x,
+            attention_mask=attention_mask,
+        )
+        # Residual adds normalized Q and attention output
+        mid = q + attn_out
+
+        # Second LayerNorm
+        mid_norm = self.ffn_norm(mid)
+
+        # FFN internally adds its input (which is mid_norm) to its output
+        out = self.ffn(mid_norm)
+
+        return out  # type: ignore[no-any-return]

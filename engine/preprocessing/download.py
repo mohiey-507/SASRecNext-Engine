@@ -22,6 +22,7 @@ _ZIP_FOLDER_NAMES = {
     "ml-10m": "ml-10M100K",
 }
 
+
 def download_movielens(target_dir: Path, dataset: str = "ml-1m") -> None:
     """Download and extract MovieLens dataset if not already present."""
     extracted_folder_name = _ZIP_FOLDER_NAMES.get(dataset, dataset)

@@ -13,7 +13,7 @@ import torch
 import torch.nn as nn
 from engine.data import DataPipeline, SASRecEvalDataset, SASRecTrainDataset, create_dataloader
 from engine.evaluation import Evaluator
-from engine.models import SASRecNext
+from engine.models import MODEL_REGISTRY
 from engine.training import Trainer
 from engine.utils import Config, get_logger, load_config, resolve_device, set_seed
 
@@ -35,13 +35,13 @@ SEARCH_SPACES: dict[str, dict[str, Any]] = {
         "learning_rate": (5e-4, 1e-3),
         "weight_decay": (1e-6, 1e-3),
         "train_batch_size": [128, 256],
-        "lr_decay_factor": (0.5, 1.0),
+        "lr_decay_factor": (0.6, 0.99),
         "n_layers": [2, 3, 4],
         "n_heads": [4, 8],
         "d_model": [128, 256],
-        "ffn_dim": [384, 512, 768, 1024],
-        "dropout": (0.1, 0.3),
-    }
+        "ffn_dim": [384, 512],
+        "dropout": (0.0, 0.3),
+    },
 }
 
 
@@ -111,11 +111,17 @@ def objective(
             "log_dir": str(trial_log_dir),
         }
     )
+    new_runtime = base_cfg.runtime.model_copy(
+        update={
+            "show_progress": False
+        }
+    )
     cfg = base_cfg.model_copy(
         update={
             "training": new_training,
             "model": new_model,
             "data": new_data,
+            "runtime": new_runtime,
         }
     )
 
@@ -154,7 +160,8 @@ def objective(
 
     try:
         # 4. Setup Model
-        model = SASRecNext(n_items=n_items, cfg=cfg.model).to(device)
+        model_cls = MODEL_REGISTRY[cfg.model.model_type]
+        model = model_cls(n_items=n_items, cfg=cfg.model).to(device)
 
         # 5. Setup Training Components
         optimizer = torch.optim.AdamW(
@@ -189,7 +196,12 @@ def objective(
         )
 
         # 6. Train and Return best metric
-        best_metrics_dict = trainer.fit()
+        def pruning_callback(epoch: int, metrics: dict[str, float]) -> None:
+            trial.report(metrics[cfg.evaluation.valid_metric], epoch)
+            if trial.should_prune():
+                raise optuna.TrialPruned()
+
+        best_metrics_dict = trainer.fit(epoch_callback=pruning_callback)
 
         # Print the best results for this trial across all modes
         print("\n" + "-" * 40)
@@ -218,11 +230,16 @@ def objective(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Hyperparameter Search for SASRec")
-    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m.yaml"))
+    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m/sasrecnext_tied.yaml"))
     parser.add_argument("--n-trials", type=int, default=20)
+    parser.add_argument(
+        "--override",
+        nargs="+",
+        help="Override config values, e.g. --override model.tied_weights=true data.dataset=ml-10m",
+    )
     args = parser.parse_args()
 
-    base_cfg = load_config(args.config)
+    base_cfg = load_config(args.config, overrides=args.override)
     set_seed(base_cfg.runtime.seed)
 
     # Load Data Once to avoid I/O bottlenecks across trials
@@ -232,8 +249,13 @@ def main() -> None:
 
     logger.info("Starting Optuna Hyperparameter Search (%d trials)", args.n_trials)
 
-    # Create Optuna Study maximizing the target metric
-    study = optuna.create_study(direction="maximize", study_name="sasrec_hpo")
+    # Create Optuna Study maximizing the target metric with Hyperband Pruning
+    pruner = optuna.pruners.HyperbandPruner(
+        min_resource=10,
+        max_resource=base_cfg.training.epochs,
+        reduction_factor=3
+    )
+    study = optuna.create_study(direction="maximize", study_name="sasrec_hpo", pruner=pruner)
 
     # Run Optimization
     study.optimize(

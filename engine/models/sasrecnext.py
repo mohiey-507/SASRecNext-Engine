@@ -20,6 +20,9 @@ class SASRecNext(nn.Module):
     No explicit negative sampling — all non-target items are implicit negatives.
     """
 
+    causal_mask: torch.Tensor
+    output_layer: nn.Linear | None
+
     def __init__(self, n_items: int, cfg: ModelConfig) -> None:
         super().__init__()
         self.n_items = n_items
@@ -27,6 +30,9 @@ class SASRecNext(nn.Module):
 
         self.item_embedding = nn.Embedding(n_items + 1, cfg.d_model, padding_idx=0)
         self.embedding_dropout = nn.Dropout(cfg.embedding_dropout)
+
+        self.tied_weights = cfg.tied_weights
+        self.output_layer = nn.Linear(cfg.d_model, n_items + 1, bias=False) if not self.tied_weights else None
 
         self.layers = nn.ModuleList(
             [
@@ -60,12 +66,14 @@ class SASRecNext(nn.Module):
             if isinstance(module, nn.Linear):
                 nn.init.xavier_uniform_(module.weight)
 
+        if not self.tied_weights and self.output_layer is not None:
+            nn.init.xavier_uniform_(self.output_layer.weight)
+
     def forward(
         self,
         input_ids: Tensor,
         return_last_only: bool = False,
-        return_attn_weights: bool = False,
-    ) -> Tensor | tuple[Tensor, list[Tensor | None]]:
+    ) -> Tensor:
         """Produce logits over the full item catalog.
 
         Args:
@@ -81,27 +89,18 @@ class SASRecNext(nn.Module):
 
         x = self.embedding_dropout(self.item_embedding(input_ids))
 
-        attn_weights_list = []
         for layer in self.layers:
-            x, attn_weights = layer(x, attn_mask, return_attn_weights)
-            if return_attn_weights:
-                attn_weights_list.append(attn_weights)
+            x = layer(x, attn_mask)
 
         x = self.final_norm(x)
 
         if return_last_only:
-            # Extract the last step BEFORE projecting to the full vocabulary.
-            # (B, d_model) @ (d_model, n_items + 1) -> (B, n_items + 1)
             x_last = x[:, -1, :]
-            logits: Tensor = x_last @ self.item_embedding.weight.T
+            logits = x_last @ self.item_embedding.weight.T if self.output_layer is None else self.output_layer(x_last)
         else:
-            # Weight-tied output: (B, L, d_model) @ (d_model, n_items + 1) -> (B, L, n_items + 1)
-            logits_full: Tensor = x @ self.item_embedding.weight.T
-            logits = logits_full
+            logits = x @ self.item_embedding.weight.T if self.output_layer is None else self.output_layer(x)
 
-        if return_attn_weights:
-            return logits, attn_weights_list
-        return logits
+        return logits  # type: ignore[no-any-return]
 
     def _build_attention_mask(self, padding_mask: Tensor) -> Tensor:
         """Combine causal mask with key-padding mask for SDPA.
@@ -111,7 +110,7 @@ class SASRecNext(nn.Module):
         """
         seq_len = padding_mask.shape[1]
 
-        causal = self.causal_mask[:seq_len, :seq_len]  # type: ignore[index]  # (L, L)
+        causal = self.causal_mask[:seq_len, :seq_len]  # (L, L)
 
         # Key padding bias: (B, 1, 1, L) — -inf where key is padding, 0 elsewhere
         pad_bias = torch.zeros(

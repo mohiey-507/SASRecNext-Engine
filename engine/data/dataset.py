@@ -76,8 +76,8 @@ class SASRecTrainDataset(Dataset[dict[str, Tensor]]):
     def __len__(self) -> int:
         return len(self._samples)
 
-    def __getitem__(self, idx: int) -> dict[str, Tensor]:
-        return self._samples[idx]
+    def __getitem__(self, index: int) -> dict[str, Tensor]:
+        return self._samples[index]
 
 
 class SASRecEvalDataset(Dataset[dict[str, Tensor]]):
@@ -119,9 +119,9 @@ class SASRecEvalDataset(Dataset[dict[str, Tensor]]):
     def __len__(self) -> int:
         return len(self._user_ids)
 
-    def __getitem__(self, idx: int) -> dict[str, Tensor]:
-        sequence = self._sequences[idx]
-        target = self._targets[idx]
+    def __getitem__(self, index: int) -> dict[str, Tensor]:
+        sequence = self._sequences[index]
+        target = self._targets[index]
 
         # Truncate and left-pad
         input_ids = sequence[-self._max_seq_len :]
@@ -139,6 +139,6 @@ class SASRecEvalDataset(Dataset[dict[str, Tensor]]):
         }
 
         if self._mode in ("uni100", "both"):
-            batch["negatives"] = self._negatives[idx]
+            batch["negatives"] = self._negatives[index]
 
         return batch

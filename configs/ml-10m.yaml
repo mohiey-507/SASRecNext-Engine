@@ -7,24 +7,26 @@ runtime:
   n_workers: 0
 
 training:
-  epochs: 35
-  learning_rate: 0.0025
-  weight_decay: 1e-07
+  epochs: 20
+  learning_rate: 8.15e-4
+  weight_decay: 2.24e-05
   train_batch_size: 256
   eval_batch_size: 256
   stride: 150
   early_stopping: 5
-  lr_decay_factor: 0.96
+  lr_decay_factor: 0.9123
 
 model:
-  d_model: 128
+  model_type: SASRecNext
+  tied_weights: true
+  d_model: 256
   n_heads: 4
-  n_layers: 3
+  n_layers: 4
   max_seq_len: 200
   attn_dropout: 0.0
-  ffn_dim: 384
-  ffn_dropout: 0.1
-  embedding_dropout: 0.1
+  ffn_dim: 512
+  ffn_dropout: 0.067
+  embedding_dropout: 0.067
 
 evaluation:
   mode: full
@@ -35,22 +37,3 @@ evaluation:
 data:
   dataset: ml-10m
   train_seq_mode: "sliding_window"
-
-tmdb:
-  base_url: "https://api.themoviedb.org/3"
-  rate_limit_requests: 40
-  rate_limit_period: 10
-  include_adult: false
-
-cache:
-  enabled: true
-  ttl_seconds: 86400
-  max_size: 10000
-
-assets:
-  base_url: "https://github.com/mohiey-507/MovieRec/releases/download"
-  release_tag: "v1.0-ml10m"
-  files:
-    - "best_model.pt"
-    - "stats.json"
-    - "movie_catalog.json"

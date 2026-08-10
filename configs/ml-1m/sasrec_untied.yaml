@@ -8,25 +8,25 @@ runtime:
 
 training:
   epochs: 50
-  learning_rate: 1.25e-3
-  weight_decay: 1e-07
+  learning_rate: 2.062e-03
+  weight_decay: 3.059e-03
   train_batch_size: 64
   eval_batch_size: 128
   stride: 150
   early_stopping: 20
-  lr_decay_factor: 0.989
+  lr_decay_factor: 0.918
 
 model:
-  model_type: SASRecNext
-  tied_weights: true
+  model_type: SASRec
+  tied_weights: false
   d_model: 128
   n_heads: 4
   n_layers: 3
   max_seq_len: 200
-  attn_dropout: 0.1
+  attn_dropout: 0.0
   ffn_dim: 256
-  ffn_dropout: 0.3
-  embedding_dropout: 0.2
+  ffn_dropout: 0.296
+  embedding_dropout: 0.296
 
 evaluation:
   mode: full
@@ -37,10 +37,3 @@ evaluation:
 data:
   dataset: ml-1m
   train_seq_mode: "sliding_window"
-
-assets:
-  base_url: "https://github.com/mohiey-507/MovieRec/releases/download"
-  release_tag: "v1.0-ml1m"
-  files:
-    - "best_model.pt"
-    - "stats.json"

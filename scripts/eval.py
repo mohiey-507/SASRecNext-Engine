@@ -12,17 +12,28 @@ if TYPE_CHECKING:
 import torch
 from engine.data import DataPipeline, SASRecEvalDataset, create_dataloader
 from engine.evaluation import Evaluator
-from engine.models import SASRecNext
-from engine.utils import Config, get_logger, load_config, resolve_device, set_global_log_file, set_seed
+from engine.models import MODEL_REGISTRY
+from engine.utils import (
+    Config,
+    download_release_asset,
+    get_logger,
+    load_config,
+    resolve_device,
+    set_global_log_file,
+    set_seed,
+)
 
 logger = get_logger(__name__)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Eval SASRec")
-    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m.yaml"))
+    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m/sasrecnext_tied.yaml"))
     parser.add_argument("--max_seq_len", type=int, default=None, help="Override config evaluation max_seq_len")
-    parser.add_argument("--eval_set", type=str, choices=["val", "test", "both"], default=None, help="Override config eval_set")
+    parser.add_argument(
+        "--eval_set", type=str, choices=["val", "test", "both"], default=None, help="Override config eval_set"
+    )
+
     args = parser.parse_args()
 
     cfg = load_config(args.config)
@@ -51,16 +62,13 @@ def main() -> None:
     user_seqs, val_targets, test_targets, n_items = pipeline.load_artifacts()
 
     # Model
-    model = SASRecNext(n_items=n_items, cfg=cfg.model).to(device)
+    model_cls = MODEL_REGISTRY[cfg.model.model_type]
+    model = model_cls(n_items=n_items, cfg=cfg.model).to(device)
 
     ckpt_path = Path(cfg.data.checkpoint_dir) / "best_model.pt"
     if not ckpt_path.exists():
-        raise FileNotFoundError(
-            f"Model checkpoint not found at {ckpt_path}. "
-            "You can download it from the GitHub releases: "
-            "https://github.com/mohiey-507/MovieRec/releases "
-            "or you can train yours see scripts/train.py for more details."
-        )
+        logger.info("Model checkpoint not found at %s. Downloading from release...", ckpt_path)
+        download_release_asset(cfg, "best_model.pt", ckpt_path)
 
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     state_dict = ckpt["model_state_dict"]
@@ -127,7 +135,7 @@ def main() -> None:
             metrics=cfg.evaluation.metrics,
             top_k=cfg.evaluation.top_k,
             device=device,
-            mode=cfg.evaluation.mode
+            mode=cfg.evaluation.mode,
         )
         test_metrics = test_evaluator.evaluate()
         metrics_str = " | ".join(f"{k}: {v:.4f}" for k, v in test_metrics.items())
