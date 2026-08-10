@@ -3,18 +3,18 @@ runtime:
   enable_amp: true
   compile_model: true
   seed: 2026
-  show_progress: true
+  show_progress: false
   n_workers: 0
 
 training:
-  epochs: 50
-  learning_rate: 2.566e-03
-  weight_decay: 7.089e-05
-  train_batch_size: 64
+  epochs: 30
+  learning_rate: 7.546e-03
+  weight_decay: 6.388e-03
+  train_batch_size: 128
   eval_batch_size: 128
   stride: 150
   early_stopping: 20
-  lr_decay_factor: 0.975
+  lr_decay_factor: 0.915
 
 model:
   model_type: SASRecNext
@@ -25,15 +25,21 @@ model:
   max_seq_len: 200
   attn_dropout: 0.0
   ffn_dim: 256
-  ffn_dropout: 0.135
-  embedding_dropout: 0.135
+  ffn_dropout: 0.136
+  embedding_dropout: 0.136
 
 evaluation:
   mode: full
   top_k: [10, 20, 50, 200]
   metrics: [recall, ndcg, mrr]
-  valid_metric: mrr@10
+  valid_metric: ndcg@10
 
 data:
   dataset: ml-1m
   train_seq_mode: "sliding_window"
+
+assets:
+  base_url: "https://github.com/mohiey-507/SASRecNext-Engine/releases/download"
+  release_tag: "v1.0-ml1m"
+  files:
+    - "sasrecnext_tied_best_model.pt"

@@ -30,6 +30,7 @@ SEARCH_SPACES: dict[str, dict[str, Any]] = {
         "d_model": [64, 128],
         "ffn_dim": [128, 256, 384],
         "dropout": (0.1, 0.3),
+        "epochs": 30,
     },
     "ml-10m": {
         "learning_rate": (5e-4, 1e-3),
@@ -41,6 +42,7 @@ SEARCH_SPACES: dict[str, dict[str, Any]] = {
         "d_model": [128, 256],
         "ffn_dim": [384, 512],
         "dropout": (0.0, 0.3),
+        "epochs": 15,
     },
 }
 
@@ -60,6 +62,9 @@ def objective(
 
     dataset_name = base_cfg.data.dataset
     space = SEARCH_SPACES.get(dataset_name, SEARCH_SPACES["ml-1m"])
+
+    # Ensure reproducibility for this specific trial
+    set_seed(base_cfg.runtime.seed)
 
     # 1. Sample hyperparameters
     lr = trial.suggest_float("learning_rate", space["learning_rate"][0], space["learning_rate"][1], log=True)
@@ -87,7 +92,7 @@ def objective(
             "weight_decay": wd,
             "train_batch_size": train_bs,
             "lr_decay_factor": lr_decay_factor,
-            "epochs": 6,
+            "epochs": space.get("epochs", 20),
         }
     )
     new_model = base_cfg.model.model_copy(
@@ -255,7 +260,13 @@ def main() -> None:
         max_resource=base_cfg.training.epochs,
         reduction_factor=3
     )
-    study = optuna.create_study(direction="maximize", study_name="sasrec_hpo", pruner=pruner)
+    sampler = optuna.samplers.TPESampler(seed=base_cfg.runtime.seed)
+    study = optuna.create_study(
+        direction="maximize",
+        study_name="sasrec_hpo",
+        pruner=pruner,
+        sampler=sampler,
+    )
 
     # Run Optimization
     study.optimize(

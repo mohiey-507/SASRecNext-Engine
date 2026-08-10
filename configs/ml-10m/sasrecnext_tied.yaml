@@ -3,7 +3,7 @@ runtime:
   enable_amp: true
   compile_model: true
   seed: 2026
-  show_progress: true
+  show_progress: false
   n_workers: 0
 
 training:
@@ -32,7 +32,7 @@ evaluation:
   mode: full
   top_k: [10, 20, 50, 200]
   metrics: [recall, ndcg, mrr]
-  valid_metric: mrr@10
+  valid_metric: ndcg@10
 
 data:
   dataset: ml-10m

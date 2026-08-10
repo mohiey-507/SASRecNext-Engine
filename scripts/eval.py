@@ -33,10 +33,15 @@ def main() -> None:
     parser.add_argument(
         "--eval_set", type=str, choices=["val", "test", "both"], default=None, help="Override config eval_set"
     )
+    parser.add_argument(
+        "--override",
+        nargs="+",
+        help="Override config values, e.g. --override training.eval_batch_size=8",
+    )
 
     args = parser.parse_args()
 
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, overrides=args.override)
 
     # Override config values if passed
     cfg_dict = cfg.model_dump()
@@ -68,7 +73,8 @@ def main() -> None:
     ckpt_path = Path(cfg.data.checkpoint_dir) / "best_model.pt"
     if not ckpt_path.exists():
         logger.info("Model checkpoint not found at %s. Downloading from release...", ckpt_path)
-        download_release_asset(cfg, "best_model.pt", ckpt_path)
+        asset_name = next((f for f in cfg.assets.files if "best_model.pt" in f), f"{args.config.stem}_best_model.pt")
+        download_release_asset(cfg, asset_name, ckpt_path)
 
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     state_dict = ckpt["model_state_dict"]
