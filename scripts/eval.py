@@ -70,6 +70,13 @@ def main() -> None:
     model_cls = MODEL_REGISTRY[cfg.model.model_type]
     model = model_cls(n_items=n_items, cfg=cfg.model).to(device)
 
+    n_params = sum(p.numel() for p in model.parameters())
+    param_bytes = sum(p.numel() * p.element_size() for p in model.parameters())
+    model_size_mb = param_bytes / (1024**2)
+
+    logger.info("Model parameters: %s", f"{n_params:,}")
+    logger.info("Model size on disk/RAM: %.2f MB", model_size_mb)
+
     ckpt_path = Path(cfg.data.checkpoint_dir) / "best_model.pt"
     if not ckpt_path.exists():
         logger.info("Model checkpoint not found at %s. Downloading from release...", ckpt_path)

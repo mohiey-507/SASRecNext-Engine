@@ -1,0 +1,246 @@
+<svg viewBox="0 60 1240 310" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    <![CDATA[
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');
+    ]]>
+  </style>
+    <!-- Header Row (y=72, h=52) -->
+    <!-- Component header -->
+    <rect x="12" y="72" width="204" height="52" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.8" rx="6"/>
+    <text x="114" y="96" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Model</text>
+    <text x="114" y="112" fill="#78716c" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">vs. Evaluation Metric</text>
+
+    <!-- Role banners -->
+    <rect x="228" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="278" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">RECALL@10</text>
+
+    <rect x="336" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="386" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">NDCG@10</text>
+
+    <rect x="444" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="494" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">MRR@10</text>
+
+    <rect x="552" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="602" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">RECALL@50</text>
+
+    <rect x="660" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="710" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">NDCG@50</text>
+
+    <rect x="768" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="818" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">MRR@50</text>
+
+    <rect x="876" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="926" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">RECALL@200</text>
+
+    <rect x="984" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="1034" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">NDCG@200</text>
+
+    <rect x="1092" y="72" width="100" height="52" fill="#1c1917" rx="6"/>
+    <text x="1142" y="102" fill="#FFFFFF" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">MRR@200</text>
+
+
+    <!-- DATA ROWS -->
+    
+    <!-- Row 0 (SASRecNext Tied) y=140 -->
+    <!-- Label -->
+    <rect x="12" y="140" width="204" height="48" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.8" rx="4"/>
+    <text x="24" y="168" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">SASRecNext Tied</text>
+    
+    <!-- C0: R10 (BEST) -->
+    <rect x="228" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="278" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.3411</text>
+    <text x="278" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.7%)</text>
+    
+    <!-- C1: N10 (BEST) -->
+    <rect x="336" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="386" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.2062</text>
+    <text x="386" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.9%)</text>
+    
+    <!-- C2: M10 (BEST) -->
+    <rect x="444" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="494" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.1648</text>
+    <text x="494" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+6.0%)</text>
+
+    <!-- C3: R50 -->
+    <rect x="552" y="140" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="602" y="160" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.5861</text>
+    <text x="602" y="176" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+4.2%)</text>
+    
+    <!-- C4: N50 (BEST) -->
+    <rect x="660" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="710" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.2607</text>
+    <text x="710" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.1%)</text>
+
+    <!-- C5: M50 (BEST) -->
+    <rect x="768" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="818" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.1766</text>
+    <text x="818" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.7%)</text>
+
+    <!-- C6: R200 -->
+    <rect x="876" y="140" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="926" y="160" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.7757</text>
+    <text x="926" y="176" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.3%)</text>
+
+    <!-- C7: N200 (BEST) -->
+    <rect x="984" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="1034" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.2894</text>
+    <text x="1034" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+4.1%)</text>
+
+    <!-- C8: M200 (BEST) -->
+    <rect x="1092" y="140" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="1142" y="160" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.1787</text>
+    <text x="1142" y="176" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.5%)</text>
+
+    <!-- Row 1 (SASRecNext Untied) y=196 -->
+    <!-- Label -->
+    <rect x="12" y="196" width="204" height="48" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.8" rx="4"/>
+    <text x="24" y="224" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">SASRecNext Untied</text>
+    
+    <!-- C0: R10 -->
+    <rect x="228" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="278" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.3386</text>
+    <text x="278" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+4.9%)</text>
+    
+    <!-- C1: N10 -->
+    <rect x="336" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="386" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2028</text>
+    <text x="386" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+4.1%)</text>
+    
+    <!-- C2: M10 -->
+    <rect x="444" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="494" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1613</text>
+    <text x="494" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+3.7%)</text>
+
+    <!-- C3: R50 -->
+    <rect x="552" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="602" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.5747</text>
+    <text x="602" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.1%)</text>
+
+    <!-- C4: N50 -->
+    <rect x="660" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="710" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2553</text>
+    <text x="710" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.9%)</text>
+
+    <!-- C5: M50 -->
+    <rect x="768" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="818" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1727</text>
+    <text x="818" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+3.4%)</text>
+
+    <!-- C6: R200 -->
+    <rect x="876" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="926" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.7616</text>
+    <text x="926" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+0.4%)</text>
+
+    <!-- C7: N200 -->
+    <rect x="984" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1034" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2837</text>
+    <text x="1034" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.0%)</text>
+
+    <!-- C8: M200 -->
+    <rect x="1092" y="196" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1142" y="216" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1748</text>
+    <text x="1142" y="232" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+3.2%)</text>
+
+
+    <!-- Row 2 (SASRec Tied) y=252 -->
+    <!-- Label -->
+    <rect x="12" y="252" width="204" height="48" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.8" rx="4"/>
+    <text x="24" y="280" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">SASRec Tied</text>
+    
+    <!-- C0: R10 -->
+    <rect x="228" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="278" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.3399</text>
+    <text x="278" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.3%)</text>
+    
+    <!-- C1: N10 -->
+    <rect x="336" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="386" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2019</text>
+    <text x="386" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+3.6%)</text>
+    
+    <!-- C2: M10 -->
+    <rect x="444" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="494" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1596</text>
+    <text x="494" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.6%)</text>
+
+    <!-- C3: R50 (BEST) -->
+    <rect x="552" y="252" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="602" y="272" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.5949</text>
+    <text x="602" y="288" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+5.7%)</text>
+
+    <!-- C4: N50 -->
+    <rect x="660" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="710" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2585</text>
+    <text x="710" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+4.2%)</text>
+
+    <!-- C5: M50 -->
+    <rect x="768" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="818" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1719</text>
+    <text x="818" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.9%)</text>
+
+    <!-- C6: R200 (BEST) -->
+    <rect x="876" y="252" width="100" height="48" rx="4" fill="rgba(16,185,129,0.12)" stroke="#10b981" stroke-width="1.0"/>
+    <text x="926" y="272" fill="#047857" font-size="10" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">0.7781</text>
+    <text x="926" y="288" fill="rgba(4,120,87,0.85)" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.6%)</text>
+
+    <!-- C7: N200 -->
+    <rect x="984" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1034" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.2864</text>
+    <text x="1034" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+3.0%)</text>
+
+    <!-- C8: M200 -->
+    <rect x="1092" y="252" width="100" height="48" rx="4" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1142" y="272" fill="#1c1917" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0.1739</text>
+    <text x="1142" y="288" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">(+2.7%)</text>
+
+
+    <!-- Row 3 (SASRec Untied - BASELINE) y=308 -->
+    <!-- Label -->
+    <rect x="12" y="308" width="204" height="48" fill="#FFFFFF" stroke="rgba(28,25,23,0.12)" stroke-width="0.8" rx="4"/>
+    <text x="24" y="336" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">SASRec Untied</text>
+    <text x="204" y="336" fill="#78716c" font-size="10" font-family="'Geist', sans-serif" text-anchor="end">Baseline</text>
+    
+    <!-- C0: R10 -->
+    <rect x="228" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="278" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.3227</text>
+    <text x="278" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C1: N10 -->
+    <rect x="336" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="386" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.1948</text>
+    <text x="386" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C2: M10 -->
+    <rect x="444" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="494" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.1555</text>
+    <text x="494" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C3: R50 -->
+    <rect x="552" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="602" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.5627</text>
+    <text x="602" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C4: N50 -->
+    <rect x="660" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="710" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.2481</text>
+    <text x="710" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C5: M50 -->
+    <rect x="768" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="818" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.1671</text>
+    <text x="818" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C6: R200 -->
+    <rect x="876" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="926" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.7584</text>
+    <text x="926" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C7: N200 -->
+    <rect x="984" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1034" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.2780</text>
+    <text x="1034" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+
+    <!-- C8: M200 -->
+    <rect x="1092" y="308" width="100" height="48" rx="4" fill="rgba(120,113,108,0.08)" stroke="rgba(28,25,23,0.12)" stroke-width="0.6"/>
+    <text x="1142" y="328" fill="#78716c" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">0.1693</text>
+    <text x="1142" y="344" fill="#78716c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Baseline</text>
+</svg>

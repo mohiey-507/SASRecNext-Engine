@@ -12,16 +12,17 @@ if TYPE_CHECKING:
 
     from engine.utils.config import ModelConfig
 
+from engine.models.base import BaseRecommender
 
-class SASRec(nn.Module):
+
+class SASRec(BaseRecommender):
     """
     Standard SASRec (2018) architecture.
     Uses Absolute Positional Embeddings, LayerNorm, and standard FFN.
     """
 
     def __init__(self, n_items: int, cfg: ModelConfig) -> None:
-        super().__init__()
-        self.n_items = n_items
+        super().__init__(n_items, cfg)
         self.max_seq_len = cfg.max_seq_len
         self.d_model = cfg.d_model
         self.tied_weights = cfg.tied_weights

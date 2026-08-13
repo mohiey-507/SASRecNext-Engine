@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import torch
 import torch.nn as nn
 
+from .base import BaseRecommender
 from .blocks import RMSNorm, TransformerLayer
 
 if TYPE_CHECKING:
@@ -13,7 +14,8 @@ if TYPE_CHECKING:
     from engine.utils import ModelConfig
 
 
-class SASRecNext(nn.Module):
+
+class SASRecNext(BaseRecommender):
     """Modern SASRec with RoPE, RMSNorm, SwiGLU, and weight-tied output.
 
     Uses full-softmax cross-entropy over the entire item catalog.
@@ -24,8 +26,7 @@ class SASRecNext(nn.Module):
     output_layer: nn.Linear | None
 
     def __init__(self, n_items: int, cfg: ModelConfig) -> None:
-        super().__init__()
-        self.n_items = n_items
+        super().__init__(n_items, cfg)
         self.max_seq_len = cfg.max_seq_len
 
         self.item_embedding = nn.Embedding(n_items + 1, cfg.d_model, padding_idx=0)

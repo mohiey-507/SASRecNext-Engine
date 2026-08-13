@@ -33,7 +33,7 @@ def main() -> None:
         "--min_history", type=int, default=None, help="Minimum history length. Defaults to max(max_seq_lens) + 1."
     )
     parser.add_argument(
-        "--max_seq_lens", type=str, default="2,4,8,16,32,64,128,200,220,240,260,280,300", help="Comma-separated sequence lengths"
+        "--max_seq_lens", type=str, default="2,4,8,16,32,48,64,80,96,112,128,144,160,176,192,200,225,250,275,300", help="Comma-separated sequence lengths"
     )
     parser.add_argument(
         "--eval_set", type=str, choices=["val", "test", "both"], default="test", help="Which set to evaluate on"
@@ -52,7 +52,7 @@ def main() -> None:
 
     log_dir = Path(cfg.data.log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
-    set_global_log_file(log_dir, "eval_long_seq.log")
+    set_global_log_file(log_dir, "eval_sequences.log")
 
     set_seed(cfg.runtime.seed)
 
@@ -101,7 +101,19 @@ def main() -> None:
         w_cfg = Config(**w_cfg_dict)
 
         model = model_cls(n_items=n_items, cfg=w_cfg.model).to(device)
-        model.load_state_dict(uncompiled, strict=False)
+
+        w_state_dict = uncompiled.copy()
+        if "pos_emb.weight" in w_state_dict:
+            ckpt_pos = w_state_dict["pos_emb.weight"]
+            if ckpt_pos.shape[0] != w:
+                if w <= ckpt_pos.shape[0]:
+                    w_state_dict["pos_emb.weight"] = ckpt_pos[:w, :]
+                else:
+                    new_pos = torch.zeros((w, ckpt_pos.shape[1]), device=ckpt_pos.device, dtype=ckpt_pos.dtype)
+                    new_pos[:ckpt_pos.shape[0], :] = ckpt_pos
+                    w_state_dict["pos_emb.weight"] = new_pos
+
+        model.load_state_dict(w_state_dict, strict=False)
 
         eval_model: nn.Module = torch.compile(model, dynamic=True) if w_cfg.runtime.compile_model else model  # type: ignore
         eval_model.eval()
