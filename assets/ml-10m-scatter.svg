@@ -1,0 +1,138 @@
+<svg viewBox="0 50 1000 440" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    <![CDATA[
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');
+    ]]>
+  </style>
+
+    <defs>
+      <marker id="arrowhead" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#eb6c36"/>
+      </marker>
+    </defs>
+
+    <!-- Quadrant Background Area (Top-Left Holy Grail) -->
+    <rect x="80" y="60" width="440" height="230" fill="rgba(16,185,129,0.035)"/>
+
+    <!-- Quadrant Green Dashed Dividers -->
+    <line x1="520" y1="60" x2="520" y2="420" stroke="rgba(16,185,129,0.35)" stroke-width="1.5" stroke-dasharray="8 8"/>
+    <line x1="80" y1="290" x2="960" y2="290" stroke="rgba(16,185,129,0.35)" stroke-width="1.5" stroke-dasharray="8 8"/>
+
+    <!-- X gridlines (Subtle vertical grid) -->
+    <line x1="80" y1="60" x2="80" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="80" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">4.0M</text>
+
+    <line x1="256" y1="60" x2="256" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="256" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">5.0M</text>
+
+    <line x1="432" y1="60" x2="432" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="432" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">6.0M</text>
+
+    <line x1="608" y1="60" x2="608" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="608" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">7.0M</text>
+
+    <line x1="784" y1="60" x2="784" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="784" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">8.0M</text>
+
+    <line x1="960" y1="60" x2="960" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="960" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">9.0M</text>
+
+    <!-- X Axis Title -->
+    <text x="520" y="475" font-family="'Geist', sans-serif" font-weight="600" font-size="12" fill="#1c1917" text-anchor="middle">Model Size (Trainable Parameters)</text>
+
+    <!-- Y gridlines (Subtle horizontal grid) -->
+    <line x1="80" y1="420" x2="960" y2="420" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="423" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.200</text>
+
+    <line x1="80" y1="369" x2="960" y2="369" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="372" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.202</text>
+
+    <line x1="80" y1="317" x2="960" y2="317" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="320" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.204</text>
+
+    <line x1="80" y1="266" x2="960" y2="266" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="269" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.206</text>
+
+    <line x1="80" y1="214" x2="960" y2="214" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="217" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.208</text>
+
+    <line x1="80" y1="163" x2="960" y2="163" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="166" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.210</text>
+
+    <line x1="80" y1="111" x2="960" y2="111" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="114" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.212</text>
+
+    <line x1="80" y1="60" x2="960" y2="60" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="63" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.214</text>
+
+    <!-- Trimmed Seaborn-style Axis Spines (Left and Bottom ONLY) -->
+    <!-- Left Spine -->
+    <line x1="80" y1="60" x2="80" y2="420" stroke="#1c1917" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Bottom Spine -->
+    <line x1="80" y1="420" x2="960" y2="420" stroke="#1c1917" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Left Ticks -->
+    <line x1="74" y1="420" x2="80" y2="420" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="369" x2="80" y2="369" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="317" x2="80" y2="317" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="266" x2="80" y2="266" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="214" x2="80" y2="214" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="163" x2="80" y2="163" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="111" x2="80" y2="111" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="74" y1="60" x2="80" y2="60" stroke="#1c1917" stroke-width="1.2"/>
+
+    <!-- Bottom Ticks -->
+    <line x1="80" y1="420" x2="80" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="256" y1="420" x2="256" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="432" y1="420" x2="432" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="608" y1="420" x2="608" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="784" y1="420" x2="784" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+    <line x1="960" y1="420" x2="960" y2="426" stroke="#1c1917" stroke-width="1.2"/>
+
+    <!-- Y Axis Title -->
+    <text x="25" y="240" transform="rotate(-90 25,240)" font-family="'Geist', sans-serif" font-weight="600" font-size="12" fill="#1c1917" text-anchor="middle">NDCG@10 Score (Full-Ranking Test)</text>
+
+    <!-- ARROWS -->
+    <!-- SASRecNext Untied (731, 315) -> SASRecNext Tied (250, 160) -->
+    <line x1="731" y1="315" x2="250" y2="160" stroke="#eb6c36" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowhead)"/>
+
+    <!-- SASRec Untied (719, 389) -> SASRec Tied (237, 199) -->
+    <line x1="719" y1="389" x2="237" y2="199" stroke="#eb6c36" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowhead)"/>
+
+    <!-- LINE LABELS (With both % parameter reduction and NDCG@10 gain) -->
+    <g transform="rotate(17.8, 490, 237)">
+      <rect x="400" y="227" width="180" height="20" fill="#faf7f2" rx="4" stroke="rgba(235,108,54,0.3)" stroke-width="0.8"/>
+      <text x="490" y="241" font-family="'Geist Mono', monospace" font-size="10" font-weight="600" fill="#eb6c36" text-anchor="middle">-35.5% Params (+2.9% NDCG@10)</text>
+    </g>
+
+    <g transform="rotate(21.5, 478, 294)">
+      <rect x="388" y="284" width="180" height="20" fill="#faf7f2" rx="4" stroke="rgba(235,108,54,0.3)" stroke-width="0.8"/>
+      <text x="478" y="298" font-family="'Geist Mono', monospace" font-size="10" font-weight="600" fill="#eb6c36" text-anchor="middle">-35.9% Params (+3.7% NDCG@10)</text>
+    </g>
+
+    <!-- POINTS & LABELS -->
+    <!-- SASRecNext Untied (7.70M params, NDCG@10 = 0.2041) -->
+    <circle cx="731" cy="315" r="19.5" fill="#faf7f2"/>
+    <circle cx="731" cy="315" r="19.5" fill="rgba(79,93,117,0.20)" stroke="#4f5d75" stroke-width="1"/>
+    <rect x="666" y="279" width="130" height="16" fill="#faf7f2" rx="3"/>
+    <text x="731" y="291" font-family="'Geist Mono', monospace" font-size="10" fill="#4f5d75" text-anchor="middle">SASRecNext (Untied)</text>
+
+    <!-- SASRec Tied (4.89M params, NDCG@10 = 0.2086) -->
+    <circle cx="237" cy="199" r="15" fill="#faf7f2"/>
+    <circle cx="237" cy="199" r="15" fill="rgba(235,108,54,0.15)" stroke="#eb6c36" stroke-width="1.5"/>
+    <rect x="187" y="218" width="100" height="14" fill="#faf7f2"/>
+    <text x="237" y="229" font-family="'Geist Mono', monospace" font-size="11" fill="#eb6c36" font-weight="600" text-anchor="middle">SASRec (Tied)</text>
+
+    <!-- SASRec Untied (7.63M params, NDCG@10 = 0.2012) -->
+    <circle cx="719" cy="389" r="19.5" fill="#faf7f2"/>
+    <circle cx="719" cy="389" r="19.5" fill="rgba(79,93,117,0.20)" stroke="#4f5d75" stroke-width="1"/>
+    <rect x="654" y="353" width="130" height="16" fill="#faf7f2" rx="3"/>
+    <text x="719" y="365" font-family="'Geist Mono', monospace" font-size="10" fill="#4f5d75" text-anchor="middle">SASRec (Untied)</text>
+
+    <!-- SASRecNext Tied (4.96M params, NDCG@10 = 0.2101) -->
+    <circle cx="250" cy="160" r="15.5" fill="#faf7f2"/>
+    <circle cx="250" cy="160" r="15.5" fill="rgba(16,185,129,0.20)" stroke="#10b981" stroke-width="1.8"/>
+    <rect x="185" y="127" width="130" height="14" fill="#faf7f2"/>
+    <text x="250" y="138" font-family="'Geist Mono', monospace" font-size="11" fill="#047857" font-weight="700" text-anchor="middle">SASRecNext (Tied) ★</text>
+
+  </svg>

@@ -33,16 +33,16 @@ SEARCH_SPACES: dict[str, dict[str, Any]] = {
         "epochs": 30,
     },
     "ml-10m": {
-        "learning_rate": (5e-4, 1e-3),
-        "weight_decay": (1e-6, 1e-3),
-        "train_batch_size": [128, 256],
-        "lr_decay_factor": (0.6, 0.99),
-        "n_layers": [2, 3, 4],
+        "learning_rate": (2e-4, 5e-3),
+        "weight_decay": (1e-6, 5e-4),
+        "train_batch_size": [128],
+        "lr_decay_factor": (0.85, 0.99),
+        "n_layers": [3, 4],
         "n_heads": [4, 8],
-        "d_model": [128, 256],
+        "d_model": [256],
         "ffn_dim": [384, 512],
-        "dropout": (0.0, 0.3),
-        "epochs": 15,
+        "dropout": (0.0, 0.15),
+        "epochs": 25,
     },
 }
 
@@ -101,9 +101,9 @@ def objective(
             "n_heads": n_heads,
             "n_layers": n_layers,
             "ffn_dim": ffn_dim,
-            "attn_dropout": dropout,
+            "attn_dropout": 0.0,
             "ffn_dropout": dropout,
-            "embedding_dropout": dropout,
+            "embedding_dropout": 0.05,
         }
     )
 
@@ -255,10 +255,11 @@ def main() -> None:
     logger.info("Starting Optuna Hyperparameter Search (%d trials)", args.n_trials)
 
     # Create Optuna Study maximizing the target metric with Hyperband Pruning
+    epochs_total = SEARCH_SPACES.get(base_cfg.data.dataset, {}).get("epochs", base_cfg.training.epochs)
     pruner = optuna.pruners.HyperbandPruner(
-        min_resource=10,
-        max_resource=base_cfg.training.epochs,
-        reduction_factor=3
+        min_resource=5,
+        max_resource=epochs_total,
+        reduction_factor=3,
     )
     sampler = optuna.samplers.TPESampler(seed=base_cfg.runtime.seed)
     study = optuna.create_study(

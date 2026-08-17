@@ -11,7 +11,7 @@ from engine.utils import load_config, set_seed
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Preprocess MovieLens data")
-    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m.yaml"))
+    parser.add_argument("--config", type=Path, default=Path("configs/ml-10m/sasrecnext_tied.yaml"))
     args = parser.parse_args()
 
     cfg = load_config(args.config)

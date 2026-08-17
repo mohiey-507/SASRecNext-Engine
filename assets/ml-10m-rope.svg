@@ -1,0 +1,166 @@
+<svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    <![CDATA[
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');
+    ]]>
+  </style>
+    <!-- Extrapolation Zone Background -->
+    <rect x="640" y="40" width="70" height="380" fill="rgba(16,185,129,0.06)"/>
+    <text x="675" y="230" font-family="'Geist Mono', monospace" font-weight="600" font-size="10" letter-spacing="0.1em" fill="#047857" text-anchor="middle" transform="rotate(-90, 675, 230)">EXTRAPOLATION</text>
+
+    <!-- X gridlines & Labels -->
+    <text x="80" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">0</text>
+    <text x="169.6" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">32</text>
+    <text x="259.2" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">64</text>
+    <text x="348.8" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">96</text>
+    <text x="438.4" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">128</text>
+    <text x="528.0" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">160</text>
+    
+    <text x="640.0" y="440" font-family="'Geist Mono', monospace" font-size="10" font-weight="600" fill="#1c1917" text-anchor="middle">200</text>
+    <text x="710.0" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">225</text>
+    <text x="780.0" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">250</text>
+    <text x="850.0" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">275</text>
+    <text x="920.0" y="440" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="middle">300</text>
+
+    <!-- X Axis Title -->
+    <text x="500" y="475" font-family="'Geist', sans-serif" font-weight="600" font-size="12" fill="#1c1917" text-anchor="middle">Inference Sequence Window Length (Tokens)</text>
+
+    <!-- Y gridlines (Subtle inner grid) -->
+    <line x1="80" y1="325" x2="920" y2="325" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="328" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.05</text>
+
+    <line x1="80" y1="230" x2="920" y2="230" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="233" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.10</text>
+
+    <line x1="80" y1="135" x2="920" y2="135" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="138" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.15</text>
+
+    <line x1="80" y1="40" x2="920" y2="40" stroke="rgba(28,25,23,0.05)" stroke-width="1"/>
+    <text x="65" y="43" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.20</text>
+
+    <text x="65" y="423" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="end">0.00</text>
+
+    <!-- Trimmed Seaborn-style Axis Spines (Left and Bottom ONLY) -->
+    <!-- Left Spine -->
+    <line x1="80" y1="40" x2="80" y2="420" stroke="#1c1917" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Bottom Spine -->
+    <line x1="80" y1="420" x2="920" y2="420" stroke="#1c1917" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Left Ticks -->
+    <g stroke="#1c1917" stroke-width="1.2">
+      <line x1="74" y1="420" x2="80" y2="420"/>
+      <line x1="74" y1="325" x2="80" y2="325"/>
+      <line x1="74" y1="230" x2="80" y2="230"/>
+      <line x1="74" y1="135" x2="80" y2="135"/>
+      <line x1="74" y1="40" x2="80" y2="40"/>
+    </g>
+
+    <!-- Bottom Ticks -->
+    <g stroke="#1c1917" stroke-width="1.2">
+      <line x1="80" y1="420" x2="80" y2="426"/>
+      <line x1="169.6" y1="420" x2="169.6" y2="426"/>
+      <line x1="259.2" y1="420" x2="259.2" y2="426"/>
+      <line x1="348.8" y1="420" x2="348.8" y2="426"/>
+      <line x1="438.4" y1="420" x2="438.4" y2="426"/>
+      <line x1="528.0" y1="420" x2="528.0" y2="426"/>
+      <line x1="640.0" y1="420" x2="640.0" y2="426"/>
+      <line x1="710.0" y1="420" x2="710.0" y2="426"/>
+      <line x1="780.0" y1="420" x2="780.0" y2="426"/>
+      <line x1="850.0" y1="420" x2="850.0" y2="426"/>
+      <line x1="920.0" y1="420" x2="920.0" y2="426"/>
+    </g>
+
+    <!-- Y Axis Title -->
+    <text x="25" y="230" transform="rotate(-90 25,230)" font-family="'Geist', sans-serif" font-weight="600" font-size="12" fill="#1c1917" text-anchor="middle">MRR@10 Score</text>
+
+    <!-- Vertical Training Limit Divider -->
+    <line x1="640" y1="40" x2="640" y2="420" stroke="rgba(28,25,23,0.4)" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="632" y="230" font-family="'Geist', sans-serif" font-weight="600" font-size="11" fill="#1c1917" text-anchor="middle" transform="rotate(-90, 632, 230)">Training Window Limit (200)</text>
+
+    <!-- POLYLINES -->
+
+    <!-- SASRec Tied (Orange) -->
+    <polyline points="85.6,298.2 91.2,252.4 102.4,215.8 124.8,175.5 169.6,146.2 214.4,135.8 259.2,122.3 304.0,119.2 348.8,113.0 393.6,114.1 438.4,113.0 483.2,117.0 528.0,119.0 572.8,120.2 617.6,123.8 640.0,130.4"
+              fill="none" stroke="#eb6c36" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+
+    <!-- SASRecNext Tied (Emerald) -->
+    <polyline points="85.6,303.0 91.2,237.6 102.4,179.5 124.8,142.4 169.6,117.1 214.4,109.7 259.2,103.7 304.0,95.5 348.8,98.0 393.6,95.7 438.4,96.1 483.2,97.8 528.0,100.2 572.8,103.3 617.6,98.9 640.0,102.3"
+              fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+              
+    <polyline points="640.0,102.3 684.8,110.1"
+              fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+
+    <polyline points="684.8,110.1 729.6,161.4 774.4,242.0 819.2,276.4 864.0,296.3 908.8,312.1 920.0,313.4"
+              fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+
+    <!-- CRASH MARKERS -->
+    <!-- SASRec Tied Crash -->
+    <path d="M 633 123.4 L 647 137.4 M 647 123.4 L 633 137.4" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="654" y="133.4" font-family="'Geist Mono', monospace" font-size="10" fill="#78716c" text-anchor="start">SASRec (Tied) Crash</text>
+
+    <!-- DATA POINTS -->
+    <!-- SASRec Tied -->
+    <g fill="#eb6c36">
+      <circle cx="85.6" cy="298.2" r="2.5"/>
+      <circle cx="91.2" cy="252.4" r="2.5"/>
+      <circle cx="102.4" cy="215.8" r="2.5"/>
+      <circle cx="124.8" cy="175.5" r="2.5"/>
+      <circle cx="169.6" cy="146.2" r="2.5"/>
+      <circle cx="214.4" cy="135.8" r="2.5"/>
+      <circle cx="259.2" cy="122.3" r="2.5"/>
+      <circle cx="304.0" cy="119.2" r="2.5"/>
+      <circle cx="348.8" cy="113.0" r="2.5"/>
+      <circle cx="393.6" cy="114.1" r="2.5"/>
+      <circle cx="438.4" cy="113.0" r="2.5"/>
+      <circle cx="483.2" cy="117.0" r="2.5"/>
+      <circle cx="528.0" cy="119.0" r="2.5"/>
+      <circle cx="572.8" cy="120.2" r="2.5"/>
+      <circle cx="617.6" cy="123.8" r="2.5"/>
+    </g>
+
+    <!-- SASRecNext Tied -->
+    <g fill="#10b981">
+      <circle cx="85.6" cy="303.0" r="2.5"/>
+      <circle cx="91.2" cy="237.6" r="2.5"/>
+      <circle cx="102.4" cy="179.5" r="2.5"/>
+      <circle cx="124.8" cy="142.4" r="2.5"/>
+      <circle cx="169.6" cy="117.1" r="2.5"/>
+      <circle cx="214.4" cy="109.7" r="2.5"/>
+      <circle cx="259.2" cy="103.7" r="2.5"/>
+      <circle cx="304.0" cy="95.5" r="2.5"/>
+      <circle cx="348.8" cy="98.0" r="2.5"/>
+      <circle cx="393.6" cy="95.7" r="2.5"/>
+      <circle cx="438.4" cy="96.1" r="2.5"/>
+      <circle cx="483.2" cy="97.8" r="2.5"/>
+      <circle cx="528.0" cy="100.2" r="2.5"/>
+      <circle cx="572.8" cy="103.3" r="2.5"/>
+      <circle cx="617.6" cy="98.9" r="2.5"/>
+    </g>
+    
+    <!-- Maintained focal points slightly larger, but reduced -->
+    <circle cx="640.0" cy="102.3" r="4" fill="#f5f5f5"/>
+    <circle cx="640.0" cy="102.3" r="4" fill="#10b981"/>
+
+    <circle cx="684.8" cy="110.1" r="4.5" fill="#faf7f2"/>
+    <circle cx="684.8" cy="110.1" r="4.5" fill="rgba(16,185,129,0.8)"/>
+    <circle cx="684.8" cy="110.1" r="4.5" fill="none" stroke="#047857" stroke-width="1.5"/>
+
+    <g fill="#10b981" opacity="0.8">
+      <circle cx="729.6" cy="161.4" r="2.5"/>
+      <circle cx="774.4" cy="242.0" r="2.5"/>
+      <circle cx="819.2" cy="276.4" r="2.5"/>
+      <circle cx="864.0" cy="296.3" r="2.5"/>
+      <circle cx="908.8" cy="312.1" r="2.5"/>
+      <circle cx="920.0" cy="313.4" r="2.5"/>
+    </g>
+
+    <!-- Legend -->
+    <line x1="80" y1="460" x2="920" y2="460" stroke="rgba(28,25,23,0.12)" stroke-width="0.8"/>
+    
+    <line x1="80" y1="483" x2="96" y2="483" stroke="#10b981" stroke-width="2.5"/>
+    <text x="105" y="487" font-family="'Geist', sans-serif" font-size="11" fill="#78716c">SASRecNext (RoPE, Tied)</text>
+
+    <line x1="280" y1="483" x2="296" y2="483" stroke="#eb6c36" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="305" y="487" font-family="'Geist', sans-serif" font-size="11" fill="#78716c">SASRec (APE, Tied)</text>
+
+  </svg>

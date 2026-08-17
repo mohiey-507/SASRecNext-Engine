@@ -7,26 +7,26 @@ runtime:
   n_workers: 0
 
 training:
-  epochs: 15
-  learning_rate: 9.01e-04
-  weight_decay: 7.37e-06
-  train_batch_size: 256
-  eval_batch_size: 256
+  epochs: 25
+  learning_rate: 8.00e-04
+  weight_decay: 2.500e-06
+  train_batch_size: 128
+  eval_batch_size: 128
   stride: 150
   early_stopping: 5
-  lr_decay_factor: 0.886
+  lr_decay_factor: 0.960
 
 model:
   model_type: SASRec
   tied_weights: false
   d_model: 256
   n_heads: 4
-  n_layers: 3
+  n_layers: 4
   max_seq_len: 200
   attn_dropout: 0.0
-  ffn_dim: 384
-  ffn_dropout: 0.15
-  embedding_dropout: 0.15
+  ffn_dim: 512
+  ffn_dropout: 0.100
+  embedding_dropout: 0.050
 
 evaluation:
   mode: full
@@ -39,4 +39,7 @@ data:
   train_seq_mode: "sliding_window"
 
 assets:
-  base_url: "https://github.com/mohiey-507/MovieRec/releases/download"
+  base_url: "https://github.com/mohiey-507/SASRecNext-Engine/releases/download"
+  release_tag: "v1.0-ml10m"
+  files:
+    - "sasrec_untied_best_model.pt"
