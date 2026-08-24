@@ -7,13 +7,13 @@ runtime:
   n_workers: 0
 
 training:
-  epochs: 25
+  epochs: 40
   learning_rate: 2.210e-03
   weight_decay: 1.417e-06
   train_batch_size: 128
   eval_batch_size: 128
   stride: 150
-  early_stopping: 5
+  early_stopping: 7
   lr_decay_factor: 0.990
 
 model:

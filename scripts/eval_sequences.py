@@ -94,26 +94,20 @@ def main() -> None:
     for w in lens:
         logger.info("Evaluating exact window size: %d", w)
 
+        if cfg.model.model_type == "SASRec" and w > cfg.model.max_seq_len:
+            logger.info("Skipping window %d for SASRec (max_seq_len=%d)", w, cfg.model.max_seq_len)
+            continue
+
         # Re-instantiate config for the specific window
         w_cfg_dict = cfg.model_dump()
         w_cfg_dict["evaluation"]["max_seq_len"] = w
-        w_cfg_dict["model"]["max_seq_len"] = w
+        if w > cfg.model.max_seq_len:
+            w_cfg_dict["model"]["max_seq_len"] = w
         w_cfg = Config(**w_cfg_dict)
 
         model = model_cls(n_items=n_items, cfg=w_cfg.model).to(device)
 
-        w_state_dict = uncompiled.copy()
-        if "pos_emb.weight" in w_state_dict:
-            ckpt_pos = w_state_dict["pos_emb.weight"]
-            if ckpt_pos.shape[0] != w:
-                if w <= ckpt_pos.shape[0]:
-                    w_state_dict["pos_emb.weight"] = ckpt_pos[:w, :]
-                else:
-                    new_pos = torch.zeros((w, ckpt_pos.shape[1]), device=ckpt_pos.device, dtype=ckpt_pos.dtype)
-                    new_pos[:ckpt_pos.shape[0], :] = ckpt_pos
-                    w_state_dict["pos_emb.weight"] = new_pos
-
-        model.load_state_dict(w_state_dict, strict=False)
+        model.load_state_dict(uncompiled)
 
         eval_model: nn.Module = torch.compile(model, dynamic=True) if w_cfg.runtime.compile_model else model  # type: ignore
         eval_model.eval()
@@ -124,7 +118,6 @@ def main() -> None:
                 targets=power_val_targets,
                 n_items=n_items,
                 window_size=w,
-                target_samples=len(user_seqs),  # Aim for original dataset size
             )
             val_loader = create_dataloader(
                 val_ds,
@@ -153,13 +146,12 @@ def main() -> None:
                 targets=power_test_targets,
                 n_items=n_items,
                 window_size=w,
-                target_samples=len(user_seqs),  # Aim for original dataset size
             )
             test_loader = create_dataloader(
                 test_ds,
                 batch_size=w_cfg.training.eval_batch_size,
                 n_workers=w_cfg.runtime.n_workers,
-                seed=w_cfg.runtime.seed,
+                seed=cfg.runtime.seed,
             )
             test_evaluator = Evaluator(
                 model=eval_model,
