@@ -83,7 +83,8 @@ def main() -> None:
 
     if not ckpt_path.exists():
         logger.info("Model checkpoint not found at %s. Downloading from release...", ckpt_path)
-        download_release_asset(cfg, "best_model.pt", ckpt_path)
+        asset_name = next((f for f in cfg.assets.files if "best_model.pt" in f), f"{args.config.stem}_best_model.pt")
+        download_release_asset(cfg, asset_name, ckpt_path)
 
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     state_dict = ckpt["model_state_dict"]

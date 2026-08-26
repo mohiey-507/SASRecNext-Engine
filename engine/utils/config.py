@@ -136,12 +136,11 @@ class DataConfig(ImmutableModel):
 
 
 class AssetsConfig(ImmutableModel):
-    base_url: str = "https://github.com/mohiey-507/MovieRec/releases/download"
+    base_url: str = "https://github.com/mohiey-507/SASRecNext-Engine/releases/download"
     release_tag: str = "v1.0-ml10m"
     files: list[str] = Field(
         default_factory=lambda: [
-            "stats.json",
-            "best_model.pt",
+            "sasrecnext_tied_best_model.pt",
         ]
     )
 

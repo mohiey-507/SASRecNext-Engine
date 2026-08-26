@@ -28,27 +28,35 @@ On top of these two changes, SASRecNext swaps in a modernized transformer stack:
 
 All models are trained and evaluated with **full-ranking evaluation** and **history masking**. No sampled metrics — every item in the catalog is scored and ranked.
 
-### MovieLens-1M
+### MovieLens-10M
 
 Four model variants compared: SASRec and SASRecNext, each with tied and untied output weights.
-
-<div align="center">
-  <img src="assets/ml-1m-table.svg" alt="ML-1M Evaluation Results" width="100%">
-</div>
-
-### MovieLens-10M
 
 <div align="center">
   <img src="assets/ml-10m-table.svg" alt="ML-10M Evaluation Results" width="100%">
 </div>
 
+SASRecNext with tied weights consistently leads on early ranking positions (NDCG@10, MRR@10), while weight tying lifts accuracy across both model families.
+
 <div align="center">
   <img src="assets/ml-10m-rope.svg" alt="RoPE Extrapolation Curve on ML-10M" width="100%">
 </div>
 
+Standard SASRec crashes immediately once inference sequences exceed the 200-token training limit, whereas RoPE lets SASRecNext handle long context lengths with smooth degradation.
+
 <div align="center">
   <img src="assets/ml-10m-scatter.svg" alt="Efficiency vs. Performance Scatter on ML-10M" width="100%">
 </div>
+
+Weight tying cuts non-embedding parameters by over 50% while boosting overall ranking accuracy, placing SASRecNext Tied in the top-left sweet spot of high accuracy and minimal footprint.
+
+### MovieLens-1M
+
+<div align="center">
+  <img src="assets/ml-1m-table.svg" alt="ML-1M Evaluation Results" width="100%">
+</div>
+
+On ML-1M, SASRecNext Tied takes top scores, showing consistent gains over the untied baseline.
 
 ## Data Processing & Evaluation Protocol
 
@@ -215,13 +223,6 @@ uv run python scripts/tools/download_assets.py --config configs/ml-1m/sasrecnext
 ```
 SASRecNext-Engine/
 ├── engine/                      # Core library
-│   ├── models/                  # SASRec, SASRecNext, BaseRecommender
-│   ├── data/                    # Datasets, DataPipeline, DataLoader
-│   ├── training/                # Trainer (AMP, early stopping, checkpointing)
-│   ├── evaluation/              # Full-ranking Evaluator
-│   ├── metrics/                 # Recall@K, NDCG@K, MRR@K
-│   ├── preprocessing/           # Download + preprocess MovieLens
-│   └── utils/                   # Config (Pydantic), logging, seeding, device
 ├── scripts/                     # Entry points
 │   ├── train.py                 # Train a model
 │   ├── eval.py                  # Evaluate a checkpoint
@@ -231,7 +232,7 @@ SASRecNext-Engine/
 ├── configs/                     # YAML configs per dataset × model variant
 │   ├── ml-1m/                   # 4 configs (SASRec/Next × Tied/Untied)
 │   └── ml-10m/                  # 4 configs (SASRec/Next × Tied/Untied)
-└── assets/                      # Result charts and visualizations
+└── assets/                      # Result charts
 ```
 
 ## References
@@ -242,7 +243,3 @@ SASRecNext-Engine/
 - **RMSNorm:** Zhang & Sennrich. _Root Mean Square Layer Normalization._ 2019. [arXiv:1910.07467](https://arxiv.org/abs/1910.07467)
 - **Weight Tying:** Press & Wolf. _Using the Output Embedding to Improve Language Models._ 2017. [arXiv:1608.05859](https://arxiv.org/abs/1608.05859)
 - **MovieLens:** Harper & Konstan. _The MovieLens Datasets: History and Context._ ACM TiiS 5(4), 2015. [DOI:10.1145/2827872](http://dx.doi.org/10.1145/2827872)
-
-## License
-
-This project is released under the [MIT License](LICENSE).
